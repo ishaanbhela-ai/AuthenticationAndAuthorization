@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Two Factor Authentication</title>
+</head>
+<body>
+
+<h2>Two Factor Authentication</h2>
+
+<h3>Send OTP</h3>
+<button onclick="sendOTP()">Send OTP</button>
+
+<h3>Verify OTP</h3>
+<input id="otp" placeholder="OTP"><br><br>
+<button onclick="verifyOTP()">Verify</button>
+
+<pre id="output"></pre>
+
+<script>
+async function sendOTP() {
+    const res = await fetch("http://localhost:8080/api/twoFactorAuth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+    });
+
+    const data = await res.json();
+
+    if(res.ok){
+        document.getElementById("output").textContent = "OTP SENT"
+    }
+    
+}
+
+async function verifyOTP() {
+    const res = await fetch("http://localhost:8080/api/twoFactorAuthVerify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            otp: parseInt(document.getElementById("otp").value)
+        })
+    });
+
+    const data = await res.json();
+    document.getElementById("output").textContent =
+        JSON.stringify(data, null, 2);
+}
+</script>
+
+</body>
+</html>
